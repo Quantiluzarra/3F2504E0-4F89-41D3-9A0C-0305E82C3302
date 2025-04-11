@@ -3,69 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карточная битва: Эдо и Восток</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Карточная Игра</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Живой фон -->
-    <div class="background">
-        <video autoplay muted loop id="bg-video">
-            <source src="background.mp4" type="video/mp4">
-            Ваш браузер не поддерживает видео.
-        </video>
-    </div>
-
-    <!-- Основной контейнер игры -->
     <div class="game-container">
-        <header>
-            <h1>Карточная битва</h1>
-            <nav>
-                <button id="menu-btn">Меню</button>
-                <button id="settings-btn">Настройки</button>
-                <button id="stats-btn">Статистика</button>
-            </nav>
-        </header>
+        <div class="live-background"></div> <header class="game-menu">
+            </header>
 
-        <main>
-            <div class="game-area">
-                <div class="arena">
-                    <div class="player-cards" id="player-arena"></div>
-                    <div class="opponent-cards" id="opponent-arena"></div>
-                </div>
-                <div class="inventory" id="inventory"></div>
-                <button id="fight-btn">Начать бой</button>
+        <main class="game-screen" id="screen-battle"> <div class="arena">
+                <div class="player-hand"> </div>
+                <div class="player-field"> </div>
+                <div class="opponent-field"> </div>
             </div>
+            <div class="game-ui">
+                </div>
         </main>
 
-        <footer>
-            <p>&copy; 2023 Ваша студия</p>
-        </footer>
+        <div class="inventory-screen" style="display: none;">
+            </div>
+
+         <div class="stats-screen" style="display: none;">
+             <h2>Статистика</h2>
+             <canvas id="statsChart"></canvas> </div>
     </div>
 
-    <!-- Модальные окна -->
-    <div id="menu-modal" class="modal">
-        <div class="modal-content">
-            <h2>Меню</h2>
-            <button id="close-menu">Закрыть</button>
-        </div>
-    </div>
-    <div id="settings-modal" class="modal">
-        <div class="modal-content">
-            <h2>Настройки</h2>
-            <label>Звук: <input type="checkbox" id="sound-toggle" checked></label>
-            <button id="close-settings">Закрыть</button>
-        </div>
-    </div>
-    <div id="stats-modal" class="modal">
-        <div class="modal-content">
-            <h2>Статистика</h2>
-            <canvas id="stats-chart"></canvas>
-            <button id="close-stats">Закрыть</button>
-        </div>
-    </div>
-
-    <!-- Подключение библиотек и скриптов -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="game.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <script src="game.js"></script>
 </body>
 </html>
