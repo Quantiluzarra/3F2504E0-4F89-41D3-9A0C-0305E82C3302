@@ -1,118 +1,84 @@
 // game.js
-document.addEventListener('DOMContentLoaded', () => {
-    // Элементы DOM
-    const playerArena = document.getElementById('player-arena');
-    const opponentArena = document.getElementById('opponent-arena');
-    const inventoryEl = document.getElementById('inventory');
-    const fightBtn = document.getElementById('fight-btn');
-    const menuBtn = document.getElementById('menu-btn');
-    const settingsBtn = document.getElementById('settings-btn');
-    const statsBtn = document.getElementById('stats-btn');
-    const menuModal = document.getElementById('menu-modal');
-    const settingsModal = document.getElementById('settings-modal');
-    const statsModal = document.getElementById('stats-modal');
-    const closeButtons = document.querySelectorAll('.modal-content button');
 
-    // Классы
-    class Card {
-        constructor(name, rarity, power, image) {
-            this.name = name;
-            this.rarity = rarity;
-            this.power = power;
-            this.image = image;
-        }
+// 1. Данные карт (в реальном проекте приходят с сервера)
+const cardDatabase = {
+    'card001': { id: 'card001', name: 'Самурай Кеншин', rarity: 'common', attack: 5, health: 10, cost: 3, image: 'img/kenjin.png', description: 'Быстрый удар'},
+    'card002': { id: 'card002', name: 'Дракон Огня', rarity: 'rare', attack: 8, health: 12, cost: 5, image: 'img/firedragon.png', description: 'Огненное дыхание'},
+    'card003': { id: 'card003', name: 'Императрица Лотоса', rarity: 'legendary', attack: 6, health: 15, cost: 7, image: 'img/empress.png', description: 'Лечение союзников'},
+    // ... другие карты
+};
 
-        render(container) {
-            const cardEl = document.createElement('div');
-            cardEl.classList.add('card', this.rarity);
-            cardEl.style.backgroundImage = `url(${this.image})`;
-            cardEl.dataset.power = this.power;
-            cardEl.addEventListener('click', () => this.moveToArena(cardEl));
-            container.appendChild(cardEl);
-            return cardEl;
-        }
+// 2. Инвентарь игрока (тоже обычно на сервере)
+let playerInventory = ['card001', 'card001', 'card002']; // ID карт, которые есть у игрока
 
-        moveToArena(cardEl) {
-            if (playerArena.children.length < 3 && cardEl.parentElement === inventoryEl) {
-                playerArena.appendChild(cardEl);
+// 3. Логика отображения карт (очень упрощенно)
+function displayHand() {
+    const handElement = document.querySelector('.player-hand');
+    handElement.innerHTML = ''; // Очистить руку
+    // Логика получения карт для текущей руки
+    // ...
+    // Пример добавления карты в руку
+    const cardData = cardDatabase['card001'];
+    const cardDiv = document.createElement('div');
+    cardDiv.classList.add('card', cardData.rarity);
+    cardDiv.innerHTML = `
+        <strong>${cardData.name}</strong>
+        <img src="${cardData.image}" alt="${cardData.name}" style="width:80%; height:auto;">
+        <div>ATK: ${cardData.attack} / HP: ${cardData.health}</div>
+        <small>${cardData.description}</small>
+    `;
+    // Добавить обработчик клика/перетаскивания
+    cardDiv.addEventListener('click', () => playCard(cardData.id));
+    handElement.appendChild(cardDiv);
+}
+
+function playCard(cardId) {
+    console.log('Играем карту:', cardId);
+    // Здесь будет сложная логика проверки маны,
+    // перемещения карты на поле, отправки хода на сервер и т.д.
+}
+
+// 4. Логика для экрана статистики (используя Chart.js)
+function showStatsScreen() {
+    // Показать экран статистики, скрыть другие
+    document.getElementById('screen-battle').style.display = 'none';
+    document.querySelector('.stats-screen').style.display = 'block';
+
+    // Получить данные для графика (например, с сервера)
+    const statsData = {
+        wins: [1, 3, 4, 6, 8], // Побед за последние 5 дней/игр
+        losses: [2, 1, 3, 2, 1] // Поражений
+    };
+
+    const ctx = document.getElementById('statsChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line', // Линейный график
+        data: {
+            labels: ['День 1', 'День 2', 'День 3', 'День 4', 'День 5'], // Оси X
+            datasets: [{
+                label: 'Победы',
+                data: statsData.wins,
+                borderColor: 'rgb(75, 192, 192)', // Зеленый цвет
+                tension: 0.1
+            }, {
+                label: 'Поражения',
+                data: statsData.losses,
+                borderColor: 'rgb(255, 99, 132)', // Красный цвет
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Позволяет графику занимать всю высоту контейнера
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
             }
         }
-    }
-
-    class Player {
-        constructor(name) {
-            this.name = name;
-            this.cards = [];
-            this.wins = 0;
-            this.losses = 0;
-            this.draws = 0;
-        }
-
-        addCard(card) {
-            this.cards.push(card);
-            card.render(inventoryEl);
-        }
-    }
-
-    // Инициализация игрока
-    const player = new Player('Игрок');
-    const opponentCards = [
-        new Card('Воин Тени', 'rare', 20, 'shadow-warrior.jpg'),
-        new Card('Дракон Огня', 'epic', 35, 'fire-dragon.jpg'),
-    ];
-
-    // Пример карт
-    player.addCard(new Card('Самурай', 'common', 10, 'samurai.jpg'));
-    player.addCard(new Card('Ниндзя', 'rare', 15, 'ninja.jpg'));
-    player.addCard(new Card('Феникс', 'legendary', 50, 'phoenix.jpg'));
-    player.addCard(new Card('Монах', 'epic', 30, 'monk.jpg'));
-
-    opponentCards.forEach(card => card.render(opponentArena));
-
-    // Механика боя
-    fightBtn.addEventListener('click', () => {
-        const playerPower = Array.from(playerArena.children).reduce((sum, card) => sum + parseInt(card.dataset.power), 0);
-        const opponentPower = Array.from(opponentArena.children).reduce((sum, card) => sum + parseInt(card.dataset.power), 0);
-
-        if (playerPower > opponentPower) {
-            player.wins++;
-            alert('Победа!');
-        } else if (playerPower < opponentPower) {
-            player.losses++;
-            alert('Поражение!');
-        } else {
-            player.draws++;
-            alert('Ничья!');
-        }
     });
+}
 
-    // Управление модальными окнами
-    menuBtn.addEventListener('click', () => menuModal.style.display = 'block');
-    settingsBtn.addEventListener('click', () => settingsModal.style.display = 'block');
-    statsBtn.addEventListener('click', () => {
-        statsModal.style.display = 'block';
-        drawStatsChart(player);
-    });
-
-    closeButtons.forEach(btn => btn.addEventListener('click', () => btn.closest('.modal').style.display = 'none'));
-
-    // График статистики
-    function drawStatsChart(player) {
-        const ctx = document.getElementById('stats-chart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Победы', 'Поражения', 'Ничьи'],
-                datasets: [{
-                    label: 'Результаты',
-                    data: [player.wins, player.losses, player.draws],
-                    borderColor: ['green', 'red', 'blue'],
-                    fill: false,
-                }]
-            },
-            options: {
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-    }
-});
+// Инициализация игры (например, показать начальный экран)
+// displayHand(); // Отобразить начальную руку (если начинаем с боя)
+// showStatsScreen(); // Пример вызова экрана статистики
