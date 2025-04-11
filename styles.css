@@ -1,0 +1,184 @@
+/* styles.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    background: #1a1a1a;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+#bg-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+.game-container {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: rgba(139, 0, 0, 0.7); /* Темно-красный в стиле Эдо */
+    border-bottom: 3px solid gold;
+}
+
+h1 {
+    font-family: 'Times New Roman', serif;
+    font-size: 2em;
+}
+
+nav button {
+    padding: 8px 15px;
+    margin: 0 5px;
+    background: #333;
+    color: gold;
+    border: 2px solid gold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+nav button:hover {
+    background: #555;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px);
+}
+
+.game-area {
+    width: 90%;
+    max-width: 1200px;
+    height: 80%;
+    background: rgba(0, 0, 0, 0.8);
+    border: 3px solid gold;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.arena {
+    display: flex;
+    justify-content: space-between;
+    height: 60%;
+}
+
+.player-cards, .opponent-cards {
+    width: 48%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.inventory {
+    height: 30%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    overflow-x: auto;
+    display: flex;
+    gap: 10px;
+}
+
+#fight-btn {
+    padding: 10px 20px;
+    background: #8b0000;
+    color: gold;
+    border: 2px solid gold;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: center;
+}
+
+#fight-btn:hover {
+    background: #a00;
+}
+
+/* Карты */
+.card {
+    width: 100px;
+    height: 150px;
+    background-size: cover;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px gold;
+}
+
+/* Редкость карт */
+.common { border: 2px solid gray; }
+.rare { border: 2px solid blue; }
+.super-rare { border: 2px solid purple; }
+.epic { border: 2px solid orange; }
+.legendary { border: 2px solid gold; }
+.collectible { border: 2px solid red; animation: glow 1s infinite alternate; }
+
+@keyframes glow {
+    from { box-shadow: 0 0 10px red; }
+    to { box-shadow: 0 0 20px red; }
+}
+
+/* Модальные окна */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #1a1a1a;
+    color: gold;
+    margin: 15% auto;
+    padding: 20px;
+    border: 3px solid gold;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 500px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .game-area { width: 95%; }
+    .arena { flex-direction: column; height: auto; }
+    .player-cards, .opponent-cards { width: 100%; margin-bottom: 10px; }
+    .card { width: 80px; height: 120px; }
+}
