@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafePass - Генератор Паролей</title>
+    <title>SafePass - Профессиональный генератор паролей</title>
     <style>
         * {
             margin: 0;
@@ -11,134 +11,231 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #00f2ff;
+            --secondary: #0099ff;
+            --accent: #ff006e;
+            --dark-bg: #0a0e27;
+            --card-bg: #1a1f3a;
+            --text: #e4e4e7;
+            --text-dim: #a1a1aa;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
             overflow-x: hidden;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 30px;
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             position: relative;
-            overflow: hidden;
         }
 
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.1), transparent);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .logo {
-            font-size: 48px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 14px;
-        }
-
-        .password-display {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 25px 0;
-            position: relative;
-            overflow: hidden;
-            border: 3px solid #667eea;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-        }
-
-        .password-text {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-            word-break: break-all;
-            min-height: 32px;
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .particles {
-            position: absolute;
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
+            z-index: 0;
+            opacity: 0.15;
+            overflow: hidden;
         }
 
         .particle {
             position: absolute;
-            background: #667eea;
+            width: 2px;
+            height: 2px;
+            background: var(--primary);
             border-radius: 50%;
-            opacity: 0;
-            animation: particleFloat 1s ease-out forwards;
+            animation: float 15s infinite;
         }
 
-        @keyframes particleFloat {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) scale(0);
-            }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-100px) translateX(50px); }
+            50% { transform: translateY(-200px) translateX(-50px); }
+            75% { transform: translateY(-100px) translateX(100px); }
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: orbMove 20s infinite alternate;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            top: -200px;
+            left: -200px;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            bottom: -175px;
+            right: -175px;
+            animation-delay: -5s;
+        }
+
+        @keyframes orbMove {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 100px) scale(1.2); }
+            100% { transform: translate(-50px, 50px) scale(0.9); }
+        }
+
+        /* Container */
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .logo {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .tagline {
+            color: var(--text-dim);
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 300;
+        }
+
+        /* Main Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: clamp(30px, 5vw, 50px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        /* Password Display */
+        .password-display {
+            position: relative;
+            margin-bottom: 35px;
+        }
+
+        .password-output {
+            width: 100%;
+            background: rgba(0, 242, 255, 0.05);
+            border: 2px solid rgba(0, 242, 255, 0.2);
+            border-radius: 16px;
+            padding: 22px 60px 22px 22px;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            color: var(--text);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .password-output:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 242, 255, 0.1);
+        }
+
+        .password-output.generating {
+            animation: pulse 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #10b981;
+            animation: checkmark 0.5s ease;
+        }
+
+        @keyframes checkmark {
+            0%, 100% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.2); }
+        }
+
+        /* Strength Indicator */
+        .strength-indicator {
+            margin-bottom: 35px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .strength-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .strength-text {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .strength-bar {
             height: 8px;
-            background: #e0e0e0;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            margin-top: 15px;
             overflow: hidden;
             position: relative;
         }
 
         .strength-fill {
             height: 100%;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 10px;
-            transition: width 0.5s ease, background-color 0.5s ease;
             position: relative;
             overflow: hidden;
         }
@@ -147,7 +244,7 @@
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
@@ -155,103 +252,165 @@
         }
 
         @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% { left: -100%; }
+            100% { left: 200%; }
         }
 
-        .strength-text {
-            text-align: center;
-            margin-top: 8px;
-            font-weight: bold;
-            font-size: 14px;
+        /* Length Slider */
+        .length-control {
+            margin-bottom: 35px;
         }
 
-        .controls {
-            position: relative;
-            z-index: 1;
-        }
-
-        .control-group {
-            margin: 20px 0;
-        }
-
-        .control-label {
+        .length-label {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            color: #333;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
             font-weight: 500;
+        }
+
+        .length-value {
+            background: var(--primary);
+            color: var(--dark-bg);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-weight: 700;
         }
 
         .slider {
             width: 100%;
             height: 8px;
-            border-radius: 5px;
-            background: #e0e0e0;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
             outline: none;
             -webkit-appearance: none;
+            position: relative;
         }
 
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: var(--primary);
             cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 242, 255, 0.4);
+            transition: all 0.2s ease;
         }
 
         .slider::-webkit-slider-thumb:hover {
             transform: scale(1.2);
+            box-shadow: 0 6px 16px rgba(0, 242, 255, 0.6);
         }
 
-        .checkbox-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 15px;
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 242, 255, 0.4);
+            transition: all 0.2s ease;
         }
 
-        .checkbox-label {
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Options */
+        .options {
+            display: grid;
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .option {
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
             cursor: pointer;
-            padding: 10px 15px;
-            background: #f5f7fa;
-            border-radius: 10px;
-            transition: all 0.3s;
         }
 
-        .checkbox-label:hover {
-            background: #e8ebf0;
-            transform: translateY(-2px);
+        .option:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 242, 255, 0.3);
+            transform: translateX(4px);
         }
 
-        .checkbox-label input {
-            margin-right: 8px;
+        .option-label {
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            position: relative;
+            width: 52px;
+            height: 28px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
             cursor: pointer;
-            width: 18px;
-            height: 18px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            transition: 0.4s;
+            border-radius: 34px;
         }
 
-        .button-group {
-            display: flex;
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Buttons */
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 15px;
-            margin-top: 25px;
         }
 
         .btn {
-            flex: 1;
-            padding: 15px;
+            padding: 18px 32px;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             position: relative;
             overflow: hidden;
         }
@@ -264,9 +423,9 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
             transform: translate(-50%, -50%);
-            transition: width 0.5s, height 0.5s;
+            transition: width 0.6s, height 0.6s;
         }
 
         .btn:active::before {
@@ -275,60 +434,93 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--dark-bg);
+            box-shadow: 0 8px 24px rgba(0, 242, 255, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 242, 255, 0.4);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-            color: white;
-            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            border: 2px solid rgba(255, 255, 255, 0.1);
         }
 
         .btn-secondary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.6);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary);
         }
 
+        /* History */
         .history {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #e0e0e0;
+            margin-top: 40px;
+            animation: fadeIn 0.8s ease 0.4s both;
         }
 
-        .history-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .history-list {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .history-item {
-            background: #f5f7fa;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
+        .history-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            animation: slideIn 0.3s ease-out;
-            transition: all 0.3s;
+            margin-bottom: 20px;
         }
 
-        .history-item:hover {
-            background: #e8ebf0;
-            transform: translateX(5px);
+        .history-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .clear-history {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-dim);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .clear-history:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .history-list {
+            display: grid;
+            gap: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        .history-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .history-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            animation: slideIn 0.3s ease;
         }
 
         @keyframes slideIn {
@@ -342,392 +534,464 @@
             }
         }
 
+        .history-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 242, 255, 0.3);
+        }
+
         .history-password {
-            font-family: monospace;
-            font-size: 14px;
-            color: #333;
-            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            letter-spacing: 1px;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .history-copy {
-            background: #667eea;
-            color: white;
+            background: transparent;
             border: none;
-            padding: 5px 12px;
-            border-radius: 6px;
+            color: var(--primary);
             cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            margin-left: 12px;
         }
 
         .history-copy:hover {
-            background: #764ba2;
-            transform: scale(1.05);
+            background: rgba(0, 242, 255, 0.1);
         }
 
-        .notification {
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            .card {
+                padding: 24px 20px;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .password-output {
+                font-size: 1rem;
+                letter-spacing: 1px;
+                padding: 18px 50px 18px 18px;
+            }
+
+            .copy-btn {
+                width: 38px;
+                height: 38px;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.3s;
-            z-index: 1000;
-            font-weight: bold;
-        }
-
-        .notification.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .advanced-options {
-            margin-top: 20px;
-            padding: 20px;
-            background: #f5f7fa;
-            border-radius: 15px;
-        }
-
-        .advanced-title {
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .input-group {
-            margin: 15px 0;
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .input-group input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
+            background: var(--dark-bg);
+            color: var(--text);
+            padding: 8px 16px;
             border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s;
+            font-size: 0.85rem;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border: 1px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         }
 
-        .input-group input[type="text"]:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .generating {
-            animation: rotate 1s linear infinite;
+        .tooltip.show {
+            opacity: 1;
         }
     </style>
 </head>
 <body>
+    <div class="bg-animation">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <div class="logo">🔐 SafePass</div>
-            <div class="subtitle">Профессиональный генератор надежных паролей</div>
-        </div>
+        <header>
+            <h1 class="logo">SafePass</h1>
+            <p class="tagline">Профессиональная защита ваших данных</p>
+        </header>
 
-        <div class="password-display">
-            <div class="particles" id="particles"></div>
-            <div class="password-text" id="passwordText">Нажмите "Генерировать"</div>
-            <div class="strength-bar">
-                <div class="strength-fill" id="strengthFill" style="width: 0%; background: #ccc;"></div>
+        <div class="card">
+            <div class="password-display">
+                <input type="text" class="password-output" id="passwordOutput" readonly value="Нажмите «Генерировать»">
+                <button class="copy-btn" id="copyBtn" title="Копировать">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                </button>
             </div>
-            <div class="strength-text" id="strengthText">Надежность: -</div>
-        </div>
 
-        <div class="controls">
-            <div class="control-group">
-                <div class="control-label">
-                    <span>Длина пароля:</span>
-                    <span id="lengthValue">16</span>
+            <div class="strength-indicator">
+                <div class="strength-label">
+                    <span>Надёжность пароля</span>
+                    <span class="strength-text" id="strengthText">-</span>
                 </div>
-                <input type="range" min="4" max="64" value="16" class="slider" id="lengthSlider">
+                <div class="strength-bar">
+                    <div class="strength-fill" id="strengthFill" style="width: 0%; background: #666;"></div>
+                </div>
             </div>
 
-            <div class="control-group">
-                <div class="checkbox-group">
-                    <label class="checkbox-label">
+            <div class="length-control">
+                <div class="length-label">
+                    <span>Длина пароля</span>
+                    <span class="length-value" id="lengthValue">16</span>
+                </div>
+                <input type="range" class="slider" id="lengthSlider" min="8" max="64" value="16">
+            </div>
+
+            <div class="options">
+                <label class="option">
+                    <span class="option-label">Прописные буквы (A-Z)</span>
+                    <label class="toggle">
                         <input type="checkbox" id="uppercase" checked>
-                        <span>Заглавные (A-Z)</span>
+                        <span class="toggle-slider"></span>
                     </label>
-                    <label class="checkbox-label">
+                </label>
+
+                <label class="option">
+                    <span class="option-label">Строчные буквы (a-z)</span>
+                    <label class="toggle">
                         <input type="checkbox" id="lowercase" checked>
-                        <span>Строчные (a-z)</span>
+                        <span class="toggle-slider"></span>
                     </label>
-                    <label class="checkbox-label">
+                </label>
+
+                <label class="option">
+                    <span class="option-label">Цифры (0-9)</span>
+                    <label class="toggle">
                         <input type="checkbox" id="numbers" checked>
-                        <span>Цифры (0-9)</span>
+                        <span class="toggle-slider"></span>
                     </label>
-                    <label class="checkbox-label">
+                </label>
+
+                <label class="option">
+                    <span class="option-label">Специальные символы (!@#$%)</span>
+                    <label class="toggle">
                         <input type="checkbox" id="symbols" checked>
-                        <span>Символы (!@#$)</span>
+                        <span class="toggle-slider"></span>
                     </label>
-                </div>
+                </label>
+
+                <label class="option">
+                    <span class="option-label">Избегать похожих символов</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="noSimilar">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
+
+                <label class="option">
+                    <span class="option-label">Избегать повторений</span>
+                    <label class="toggle">
+                        <input type="checkbox" id="noDuplicate">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </label>
             </div>
 
-            <div class="advanced-options">
-                <div class="advanced-title">⚙️ Дополнительные настройки</div>
-                <div class="input-group">
-                    <label>Исключить похожие символы (0, O, l, I):</label>
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="excludeSimilar">
-                        <span>Включить фильтр</span>
-                    </label>
-                </div>
-                <div class="input-group">
-                    <label>Собственные символы:</label>
-                    <input type="text" id="customChars" placeholder="Добавьте свои символы">
-                </div>
-                <div class="input-group">
-                    <label>Исключить символы:</label>
-                    <input type="text" id="excludeChars" placeholder="Символы для исключения">
-                </div>
-                <div class="input-group">
-                    <label>Минимум цифр:</label>
-                    <input type="number" id="minNumbers" min="0" max="10" value="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid #e0e0e0;">
-                </div>
-                <div class="input-group">
-                    <label>Минимум спецсимволов:</label>
-                    <input type="number" id="minSymbols" min="0" max="10" value="2" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid #e0e0e0;">
-                </div>
-            </div>
-
-            <div class="button-group">
-                <button class="btn btn-primary" id="generateBtn">🎲 Генерировать</button>
-                <button class="btn btn-secondary" id="copyBtn">📋 Копировать</button>
+            <div class="actions">
+                <button class="btn btn-primary" id="generateBtn">Генерировать</button>
+                <button class="btn btn-secondary" id="refreshBtn">Обновить</button>
             </div>
         </div>
 
         <div class="history">
-            <div class="history-title">📜 История паролей</div>
+            <div class="history-header">
+                <h2 class="history-title">История</h2>
+                <button class="clear-history" id="clearHistory">Очистить</button>
+            </div>
             <div class="history-list" id="historyList"></div>
         </div>
     </div>
 
-    <div class="notification" id="notification"></div>
+    <div class="tooltip" id="tooltip"></div>
 
     <script>
-        const passwordText = document.getElementById('passwordText');
+        // Initialize particles
+        const bgAnimation = document.querySelector('.bg-animation');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 15 + 's';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            bgAnimation.appendChild(particle);
+        }
+
+        // Character sets
+        const charSets = {
+            uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+            lowercase: 'abcdefghijklmnopqrstuvwxyz',
+            numbers: '0123456789',
+            symbols: '!@#$%^&*()_+-=[]{}|;:,.<>?',
+            similar: 'il1Lo0O',
+        };
+
+        // Elements
+        const passwordOutput = document.getElementById('passwordOutput');
+        const copyBtn = document.getElementById('copyBtn');
         const lengthSlider = document.getElementById('lengthSlider');
         const lengthValue = document.getElementById('lengthValue');
         const generateBtn = document.getElementById('generateBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const strengthFill = document.getElementById('strengthFill');
+        const refreshBtn = document.getElementById('refreshBtn');
         const strengthText = document.getElementById('strengthText');
+        const strengthFill = document.getElementById('strengthFill');
         const historyList = document.getElementById('historyList');
-        const notification = document.getElementById('notification');
-        const particles = document.getElementById('particles');
+        const clearHistory = document.getElementById('clearHistory');
+        const tooltip = document.getElementById('tooltip');
 
-        let currentPassword = '';
-        let history = [];
+        const options = {
+            uppercase: document.getElementById('uppercase'),
+            lowercase: document.getElementById('lowercase'),
+            numbers: document.getElementById('numbers'),
+            symbols: document.getElementById('symbols'),
+            noSimilar: document.getElementById('noSimilar'),
+            noDuplicate: document.getElementById('noDuplicate'),
+        };
 
+        let passwordHistory = JSON.parse(localStorage.getItem('passwordHistory')) || [];
+
+        // Length slider
         lengthSlider.addEventListener('input', (e) => {
             lengthValue.textContent = e.target.value;
         });
 
-        function createParticles() {
-            particles.innerHTML = '';
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.className = 'particle';
-                    particle.style.left = Math.random() * 100 + '%';
-                    particle.style.top = Math.random() * 100 + '%';
-                    particle.style.width = (Math.random() * 10 + 5) + 'px';
-                    particle.style.height = particle.style.width;
-                    particles.appendChild(particle);
-                    setTimeout(() => particle.remove(), 1000);
-                }, i * 50);
-            }
-        }
-
+        // Generate password
         function generatePassword() {
             const length = parseInt(lengthSlider.value);
-            const useUppercase = document.getElementById('uppercase').checked;
-            const useLowercase = document.getElementById('lowercase').checked;
-            const useNumbers = document.getElementById('numbers').checked;
-            const useSymbols = document.getElementById('symbols').checked;
-            const excludeSimilar = document.getElementById('excludeSimilar').checked;
-            const customChars = document.getElementById('customChars').value;
-            const excludeChars = document.getElementById('excludeChars').value;
-            const minNumbers = parseInt(document.getElementById('minNumbers').value) || 0;
-            const minSymbols = parseInt(document.getElementById('minSymbols').value) || 0;
-
             let charset = '';
-            let uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            let lowercase = 'abcdefghijklmnopqrstuvwxyz';
-            let numbers = '0123456789';
-            let symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
 
-            if (excludeSimilar) {
-                uppercase = uppercase.replace(/[O]/g, '');
-                lowercase = lowercase.replace(/[l]/g, '');
-                numbers = numbers.replace(/[0]/g, '');
-                uppercase = uppercase.replace(/[I]/g, '');
-            }
-
-            if (excludeChars) {
-                excludeChars.split('').forEach(char => {
-                    uppercase = uppercase.replace(new RegExp(char, 'g'), '');
-                    lowercase = lowercase.replace(new RegExp(char, 'g'), '');
-                    numbers = numbers.replace(new RegExp(char, 'g'), '');
-                    symbols = symbols.replace(new RegExp(char, 'g'), '');
-                });
-            }
-
-            if (useUppercase) charset += uppercase;
-            if (useLowercase) charset += lowercase;
-            if (useNumbers) charset += numbers;
-            if (useSymbols) charset += symbols;
-            if (customChars) charset += customChars;
+            if (options.uppercase.checked) charset += charSets.uppercase;
+            if (options.lowercase.checked) charset += charSets.lowercase;
+            if (options.numbers.checked) charset += charSets.numbers;
+            if (options.symbols.checked) charset += charSets.symbols;
 
             if (!charset) {
-                showNotification('Выберите хотя бы один тип символов!', 'error');
-                return;
+                showTooltip('Выберите хотя бы один тип символов!', generateBtn);
+                return '';
+            }
+
+            if (options.noSimilar.checked) {
+                charset = charset.split('').filter(char => !charSets.similar.includes(char)).join('');
             }
 
             let password = '';
-            let numCount = 0;
-            let symCount = 0;
+            const array = new Uint32Array(length);
+            crypto.getRandomValues(array);
 
-            // Гарантируем минимальное количество цифр и символов
-            for (let i = 0; i < minNumbers && useNumbers; i++) {
-                password += numbers.charAt(Math.floor(Math.random() * numbers.length));
-                numCount++;
-            }
+            for (let i = 0; i < length; i++) {
+                let char;
+                do {
+                    char = charset[array[i] % charset.length];
+                } while (options.noDuplicate.checked && password.includes(char));
 
-            for (let i = 0; i < minSymbols && useSymbols; i++) {
-                password += symbols.charAt(Math.floor(Math.random() * symbols.length));
-                symCount++;
-            }
+                password += char;
 
-            // Заполняем остаток
-            for (let i = password.length; i < length; i++) {
-                password += charset.charAt(Math.floor(Math.random() * charset.length));
-            }
-
-            // Перемешиваем
-            password = password.split('').sort(() => Math.random() - 0.5).join('');
-
-            currentPassword = password;
-
-            // Анимация генерации
-            generateBtn.classList.add('generating');
-            let counter = 0;
-            const interval = setInterval(() => {
-                let temp = '';
-                for (let i = 0; i < length; i++) {
-                    temp += charset.charAt(Math.floor(Math.random() * charset.length));
+                if (options.noDuplicate.checked && password.length < length) {
+                    crypto.getRandomValues(array.subarray(i + 1, i + 2));
                 }
-                passwordText.textContent = temp;
-                counter++;
-                if (counter > 10) {
-                    clearInterval(interval);
-                    passwordText.textContent = password;
-                    generateBtn.classList.remove('generating');
-                    createParticles();
-                    updateStrength(password);
-                    addToHistory(password);
-                }
-            }, 50);
+            }
+
+            return password;
         }
 
-        function updateStrength(password) {
+        // Calculate strength
+        function calculateStrength(password) {
             let strength = 0;
-            let strengthLabel = '';
-            let color = '';
+            const length = password.length;
 
-            if (password.length >= 8) strength += 20;
-            if (password.length >= 12) strength += 20;
-            if (password.length >= 16) strength += 10;
+            if (length >= 8) strength += 20;
+            if (length >= 12) strength += 20;
+            if (length >= 16) strength += 20;
             if (/[a-z]/.test(password)) strength += 10;
             if (/[A-Z]/.test(password)) strength += 10;
-            if (/[0-9]/.test(password)) strength += 15;
-            if (/[^a-zA-Z0-9]/.test(password)) strength += 15;
+            if (/[0-9]/.test(password)) strength += 10;
+            if (/[^a-zA-Z0-9]/.test(password)) strength += 10;
+
+            return strength;
+        }
+
+        // Update strength indicator
+        function updateStrength(password) {
+            const strength = calculateStrength(password);
+            let color, text;
 
             if (strength < 40) {
-                strengthLabel = 'Слабый';
-                color = '#f5576c';
-            } else if (strength < 70) {
-                strengthLabel = 'Средний';
-                color = '#f093fb';
+                color = '#ef4444';
+                text = 'Слабый';
+            } else if (strength < 60) {
+                color = '#f59e0b';
+                text = 'Средний';
+            } else if (strength < 80) {
+                color = '#10b981';
+                text = 'Хороший';
             } else {
-                strengthLabel = 'Надежный';
-                color = '#667eea';
+                color = '#00f2ff';
+                text = 'Отличный';
             }
 
             strengthFill.style.width = strength + '%';
-            strengthFill.style.background = `linear-gradient(90deg, ${color}, ${color})`;
-            strengthText.textContent = `Надежность: ${strengthLabel} (${strength}%)`;
+            strengthFill.style.background = `linear-gradient(90deg, ${color}, ${color}dd)`;
+            strengthText.textContent = text;
             strengthText.style.color = color;
         }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showNotification('✅ Пароль скопирован в буфер обмена!');
-            }).catch(() => {
-                showNotification('❌ Ошибка копирования', 'error');
-            });
+        // Animated generation
+        async function animatedGenerate() {
+            passwordOutput.classList.add('generating');
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+            const length = parseInt(lengthSlider.value);
+
+            // Animation phase
+            for (let i = 0; i < 10; i++) {
+                let tempPassword = '';
+                for (let j = 0; j < length; j++) {
+                    tempPassword += chars[Math.floor(Math.random() * chars.length)];
+                }
+                passwordOutput.value = tempPassword;
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+
+            // Final password
+            const finalPassword = generatePassword();
+            if (finalPassword) {
+                passwordOutput.value = finalPassword;
+                updateStrength(finalPassword);
+                addToHistory(finalPassword);
+            }
+
+            passwordOutput.classList.remove('generating');
         }
 
-        function showNotification(message, type = 'success') {
-            notification.textContent = message;
-            notification.style.background = type === 'error' ? 
-                'linear-gradient(135deg, #f5576c, #f093fb)' : 
-                'linear-gradient(135deg, #667eea, #764ba2)';
-            notification.classList.add('show');
+        // Copy to clipboard
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                copyBtn.classList.add('copied');
+                copyBtn.innerHTML = `
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                `;
+
+                showTooltip('Скопировано!', copyBtn);
+
+                setTimeout(() => {
+                    copyBtn.classList.remove('copied');
+                    copyBtn.innerHTML = `
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    `;
+                }, 2000);
+            } catch (err) {
+                showTooltip('Ошибка копирования', copyBtn);
+            }
+        }
+
+        // Tooltip
+        function showTooltip(text, element) {
+            const rect = element.getBoundingClientRect();
+            tooltip.textContent = text;
+            tooltip.style.left = rect.left + rect.width / 2 - tooltip.offsetWidth / 2 + 'px';
+            tooltip.style.top = rect.top - 40 + 'px';
+            tooltip.classList.add('show');
+
             setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
+                tooltip.classList.remove('show');
+            }, 2000);
         }
 
+        // History management
         function addToHistory(password) {
-            history.unshift(password);
-            if (history.length > 5) history.pop();
+            passwordHistory.unshift(password);
+            if (passwordHistory.length > 10) passwordHistory.pop();
+            localStorage.setItem('passwordHistory', JSON.stringify(passwordHistory));
             renderHistory();
         }
 
         function renderHistory() {
             historyList.innerHTML = '';
-            history.forEach((pwd, index) => {
+            passwordHistory.forEach((password, index) => {
                 const item = document.createElement('div');
                 item.className = 'history-item';
                 item.innerHTML = `
-                    <span class="history-password">${pwd.substring(0, 20)}${pwd.length > 20 ? '...' : ''}</span>
-                    <button class="history-copy" onclick="copyToClipboard('${pwd}')">Копировать</button>
+                    <span class="history-password">${password}</span>
+                    <button class="history-copy" onclick="copyToClipboard('${password}')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
                 `;
                 historyList.appendChild(item);
             });
         }
 
-        generateBtn.addEventListener('click', generatePassword);
-        copyBtn.addEventListener('click', () => {
-            if (currentPassword) {
-                copyToClipboard(currentPassword);
-            } else {
-                showNotification('❌ Сначала сгенерируйте пароль!', 'error');
-            }
+        // Event listeners
+        generateBtn.addEventListener('click', animatedGenerate);
+        refreshBtn.addEventListener('click', animatedGenerate);
+        copyBtn.addEventListener('click', () => copyToClipboard(passwordOutput.value));
+
+        clearHistory.addEventListener('click', () => {
+            passwordHistory = [];
+            localStorage.removeItem('passwordHistory');
+            renderHistory();
+            showTooltip('История очищена', clearHistory);
         });
 
-        // Генерация при загрузке
-        window.addEventListener('load', generatePassword);
+        // Initialize
+        renderHistory();
+        animatedGenerate();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') animatedGenerate();
+            if (e.ctrlKey && e.key === 'c') copyToClipboard(passwordOutput.value);
+        });
     </script>
 </body>
 </html>
